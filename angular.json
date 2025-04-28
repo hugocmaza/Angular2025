@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Angular20240421": {
+    "Angular2025": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular20240421",
+            "outputPath": "dist/angular2025",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Angular20240421:build:production"
+              "buildTarget": "Angular2025:build:production"
             },
             "development": {
-              "buildTarget": "Angular20240421:build:development"
+              "buildTarget": "Angular2025:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "9adfe59b-c3c6-4c75-9f76-15109316d2c9"
   }
 }

@@ -1,0 +1,28 @@
+<p>alumnos-abm works!</p>
+{{ alumnos }}
+
+
+<p>{{alumnoPepito.nombre}}</p>
+
+<div *ngFor="let a of alumnos">{{ a.apellido }}</div>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Nombre</th>
+    <th>Apellido</th>
+    <th>DNI</th>
+    <th>Fecha de Nacimiento</th>
+    <th>eMAIL</th>
+  </tr>
+  <tr *ngFor="let a of obtenerAlumnos()">
+    <td>{{ a.id }}</td>
+    <td>{{ a.nombre }}</td>
+    <td>{{ a.apellido }}</td>
+    <td>{{ a.dni }}</td>
+    <td>{{ a.fechaNacimiento }}</td>
+    <td>{{ a.email }}</td>
+
+  </tr>
+
+</table>

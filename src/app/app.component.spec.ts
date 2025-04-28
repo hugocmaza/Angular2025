@@ -14,10 +14,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'Angular20240421' title`, () => {
+  it(`should have the 'Angular2025' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Angular20240421');
+    expect(app.title).toEqual('Angular2025');
   });
 
   it('should render title', () => {
