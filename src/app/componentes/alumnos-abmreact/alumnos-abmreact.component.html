@@ -1,0 +1,111 @@
+
+  <h1>React Forms</h1>
+  <div class="container my-4">
+    <!-- Form for adding/editing student -->
+    <form [formGroup]="alumnoForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <input type="hidden" formControlName="id">
+
+        <label for="nombre" class="form-label">Nombre:</label>
+        <input type="text" id="nombre" formControlName="nombre" class="form-control"
+               [ngClass]="{'is-invalid': alumnoForm.get('nombre')?.invalid && alumnoForm.get('nombre')?.touched}">
+        @if (alumnoForm.get('nombre')?.invalid && alumnoForm.get('nombre')?.touched) {
+          <div class="invalid-feedback">
+            @if (alumnoForm.get('nombre')?.errors?.['required']) {
+              El nombre es requerido.
+            }
+          </div>
+        }
+
+        <label for="apellido" class="form-label">Apellido:</label>
+        <input type="text" id="apellido" formControlName="apellido" class="form-control"
+               [ngClass]="{'is-invalid': alumnoForm.get('apellido')?.invalid && alumnoForm.get('apellido')?.touched}">
+        @if (alumnoForm.get('apellido')?.invalid && alumnoForm.get('apellido')?.touched) {
+          <div class="invalid-feedback">
+            @if (alumnoForm.get('apellido')?.errors?.['required']) {
+              El apellido es requerido.
+            }
+          </div>
+        }
+
+        <label for="dni" class="form-label">DNI:</label>
+        <input type="text" id="dni" formControlName="dni" class="form-control"
+               [ngClass]="{'is-invalid': alumnoForm.get('dni')?.invalid && alumnoForm.get('dni')?.touched}">
+        @if (alumnoForm.get('dni')?.invalid && alumnoForm.get('dni')?.touched) {
+          <div class="invalid-feedback">
+            @if (alumnoForm.get('dni')?.errors?.['required']) {
+              El DNI es requerido.
+            } @else if (alumnoForm.get('dni')?.errors?.['pattern']) {
+              El DNI debe tener 7 u 8 dígitos.
+            }
+          </div>
+        }
+
+        <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento:</label>
+        <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento" class="form-control"
+               [ngClass]="{'is-invalid': alumnoForm.get('fechaNacimiento')?.invalid && alumnoForm.get('fechaNacimiento')?.touched}">
+        @if (alumnoForm.get('fechaNacimiento')?.invalid && alumnoForm.get('fechaNacimiento')?.touched) {
+          <div class="invalid-feedback">
+            @if (alumnoForm.get('fechaNacimiento')?.errors?.['required']) {
+              La fecha de nacimiento es requerida.
+            }
+          </div>
+        }
+
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" formControlName="email" class="form-control"
+               [ngClass]="{'is-invalid': alumnoForm.get('email')?.invalid && alumnoForm.get('email')?.touched}">
+        @if (alumnoForm.get('email')?.invalid && alumnoForm.get('email')?.touched) {
+          <div class="invalid-feedback">
+            @if (alumnoForm.get('email')?.errors?.['required']) {
+              El email es requerido.
+            } @else if (alumnoForm.get('email')?.errors?.['email']) {
+              Ingrese un email válido.
+            }
+          </div>
+        }
+
+        <div class="mt-3">
+          <button type="submit" [disabled]="alumnoForm.invalid" class="btn btn-primary me-2">
+            @if (alumnoForm.get('id')?.value) {
+              Actualizar
+            } @else {
+              Agregar
+            }
+          </button>
+          <button type="button" (click)="resetForm()" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Students table -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>DNI</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Email</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (a of alumnos; track a.id) {
+          <tr>
+            <td>{{ a.id }}</td>
+            <td>{{ a.nombre }}</td>
+            <td>{{ a.apellido }}</td>
+            <td>{{ a.dni }}</td>
+            <td>{{ a.fechaNacimiento | date:'dd/MM/yyyy' }}</td>
+            <td>{{ a.email }}</td>
+            <td>
+              <button (click)="editAlumno(a)" class="btn btn-sm btn-warning me-2">Editar</button>
+              <button (click)="deleteAlumno(a.id)" class="btn btn-sm btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>

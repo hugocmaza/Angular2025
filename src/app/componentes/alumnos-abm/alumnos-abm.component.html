@@ -6,23 +6,122 @@
 
 <div *ngFor="let a of alumnos">{{ a.apellido }}</div>
 
-<table>
-  <tr>
-    <th>Id</th>
-    <th>Nombre</th>
-    <th>Apellido</th>
-    <th>DNI</th>
-    <th>Fecha de Nacimiento</th>
-    <th>eMAIL</th>
-  </tr>
-  <tr *ngFor="let a of obtenerAlumnos()">
-    <td>{{ a.id }}</td>
-    <td>{{ a.nombre }}</td>
-    <td>{{ a.apellido }}</td>
-    <td>{{ a.dni }}</td>
-    <td>{{ a.fechaNacimiento }}</td>
-    <td>{{ a.email }}</td>
+<div class="container">
+  <!-- Form for adding/editing student -->
+  <form #alumnoForm="ngForm" (ngSubmit)="onSubmit(alumnoForm)">
+    <div class="form-group">
+      <input type="hidden" name="id" [(ngModel)]="selectedAlumno.id">
 
-  </tr>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre"
+             [(ngModel)]="selectedAlumno.nombre" #nombre="ngModel"
+             required class="form-control"
+             [class.is-invalid]="nombre.invalid && nombre.touched">
+      @if (nombre.invalid && nombre.touched) {
+        <div class="invalid-feedback">
+          @if (nombre.errors?.['required']) {
+            El nombre es requerido.
+          }
+        </div>
+      }
 
-</table>
+      <label for="apellido">Apellido:</label>
+      <input type="text" id="apellido" name="apellido"
+             [(ngModel)]="selectedAlumno.apellido" #apellido="ngModel"
+             required class="form-control"
+             [class.is-invalid]="apellido.invalid && apellido.touched">
+      @if (apellido.invalid && apellido.touched) {
+        <div class="invalid-feedback">
+          @if (apellido.errors?.['required']) {
+            El apellido es requerido.
+          }
+        </div>
+      }
+
+      <label for="dni">DNI:</label>
+      <input type="text" id="dni" name="dni"
+             [(ngModel)]="selectedAlumno.dni" #dni="ngModel"
+             required pattern="^\d{7,8}$" class="form-control"
+             [class.is-invalid]="dni.invalid && dni.touched">
+      @if (dni.invalid && dni.touched) {
+        <div class="invalid-feedback">
+          @if (dni.errors?.['required']) {
+            El DNI es requerido.
+          } @else if (dni.errors?.['pattern']) {
+            El DNI debe tener 7 u 8 dígitos.
+          }
+        </div>
+      }
+
+      <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+      <input type="date" id="fechaNacimiento" name="fechaNacimiento"
+             [(ngModel)]="selectedAlumno.fechaNacimiento" #fechaNacimiento="ngModel"
+             required class="form-control"
+             [class.is-invalid]="fechaNacimiento.invalid && fechaNacimiento.touched">
+      @if (fechaNacimiento.invalid && fechaNacimiento.touched) {
+        <div class="invalid-feedback">
+          @if (fechaNacimiento.errors?.['required']) {
+            La fecha de nacimiento es requerida.
+          }
+        </div>
+      }
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email"
+             [(ngModel)]="selectedAlumno.email" #email="ngModel"
+             required email class="form-control"
+             [class.is-invalid]="email.invalid && email.touched">
+      @if (email.invalid && email.touched) {
+        <div class="invalid-feedback">
+          @if (email.errors?.['required']) {
+            El email es requerido.
+          } @else if (email.errors?.['email']) {
+            Ingrese un email válido.
+          }
+        </div>
+      }
+
+      <div class="button-group">
+        <button type="submit" [disabled]="alumnoForm.invalid" class="btn btn-primary">
+          @if (selectedAlumno.id) {
+            Actualizar
+          } @else {
+            Agregar
+          }
+        </button>
+        <button type="button" (click)="resetForm(alumnoForm)" class="btn btn-secondary">Cancelar</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Students table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>DNI</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of alumnos; track a.id) {
+        <tr>
+          <td>{{ a.id }}</td>
+          <td>{{ a.nombre }}</td>
+          <td>{{ a.apellido }}</td>
+          <td>{{ a.dni }}</td>
+          <td>{{ a.fechaNacimiento | date:'shortDate' }}</td>
+          <td>{{ a.email }}</td>
+          <td>
+            <button (click)="editAlumno(a, alumnoForm)" class="btn btn-sm btn-warning">Editar</button>
+            <button (click)="deleteAlumno(a.id)" class="btn btn-sm btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
