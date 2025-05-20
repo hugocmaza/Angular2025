@@ -12,7 +12,7 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrl: './alumnos-abmreact.component.css'
 })
 export class AlumnosABMReactComponent {
-  private alumnoService = inject(AlumnoService);
+  /*private alumnoService = inject(AlumnoService);
   private fb = inject(FormBuilder);
 
   alumnos: Alumno[] = [];
@@ -80,5 +80,69 @@ export class AlumnosABMReactComponent {
   private formatDate(date: Date): string {
     const d = new Date(date);
     return d.toISOString().split('T')[0];
+  }*/
+
+    // con observable
+  alumnos: Alumno[] = [];
+  alumnoForm!: FormGroup;
+
+  constructor(private fb: FormBuilder, private alumnoService: AlumnoService) {}
+
+  ngOnInit(): void {
+    this.alumnoForm = this.fb.group({
+      id: [null],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      dni: ['', [Validators.required, Validators.pattern(/^\d{7,8}$/)]],
+      fechaNacimiento: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
+    });
+
+    this.loadAlumnos();
+  }
+
+  loadAlumnos(): void {
+    this.alumnoService.getAll().subscribe((data) => this.alumnos = data);
+  }
+
+  onSubmit(): void {
+    if (this.alumnoForm.invalid) return;
+    const alumno: Alumno = this.alumnoForm.value;
+
+    if (alumno.id) {
+      this.alumnoService.update(alumno).subscribe(() => {
+        this.loadAlumnos();
+        this.resetForm();
+      });
+    } else {
+       // Asignar ID máximo + 1
+      const maxId = Number(this.alumnos.length > 0 ? Math.max(...this.alumnos.map(a => a.id ?? 0)) : 0);
+      const alumnoToCreate: Alumno = {
+        ...alumno,
+        id: maxId + 1
+      };
+      this.alumnoService.create(alumnoToCreate).subscribe(() => {
+        this.loadAlumnos();
+        this.resetForm();
+      });
+
+    }
+  }
+
+  editAlumno(a: Alumno): void {
+    this.alumnoForm.patchValue(a);
+  }
+
+  deleteAlumno(id: number): void {
+    if (confirm('¿Está seguro que desea eliminar este alumno?')) {
+      this.alumnoService.delete(id).subscribe(() => {
+        this.loadAlumnos();
+      })
+
+    }
+  }
+
+  resetForm(): void {
+    this.alumnoForm.reset();
   }
 }

@@ -47,6 +47,8 @@ export class AlumnosABMComponent {
         return this.alumnos;
       }
 */
+/* // Sin Observables
+
 private readonly alumnoService = inject(AlumnoService);
   alumnoPepito: Alumno = {
     id: 1,
@@ -123,6 +125,82 @@ private readonly alumnoService = inject(AlumnoService);
       ? Math.max(...this.alumnos.map(a => a.id)) + 1
       : 1;
   }
+      // Fin Sin Observables
+*/
 
+// Con Observables
 
+private readonly alumnoService = inject(AlumnoService);
+  alumnoPepito: Alumno = {
+    id: 1,
+    nombre: 'Pepito',
+    apellido: 'Pérez',
+    dni: '12345678',
+    fechaNacimiento: new Date('2000-01-01'),
+    email: 'pepito@gmail.com'
+  };
+  alumnos: Alumno[] = [];
+  selectedAlumno: Alumno = this.emptyAlumno();
+
+  //constructor(private alumnoService: AlumnoService) {}
+
+  ngOnInit(): void {
+    this.loadAlumnos();
+  }
+
+  loadAlumnos(): void {
+    this.alumnoService.getAll().subscribe((data) => this.alumnos = data);
+  }
+
+  onSubmit(form: NgForm): void {
+    if (form.invalid) return;
+
+    if (this.selectedAlumno.id) {
+      this.alumnoService.update(this.selectedAlumno).subscribe(() => {
+        this.loadAlumnos();
+        this.resetForm(form);
+      });
+    } else {
+      // Asignar ID máximo + 1
+      const maxId = Number(this.alumnos.length > 0 ? Math.max(...this.alumnos.map(a => a.id ?? 0)) : 0);
+      const alumnoToCreate: Alumno = {
+        ...this.selectedAlumno,
+        id: maxId + 1
+      };
+      this.alumnoService.create(alumnoToCreate).subscribe(() => {
+        this.loadAlumnos();
+        this.resetForm(form);
+      });
+
+    }
+  }
+
+  editAlumno(a: Alumno, form: NgForm): void {
+    this.selectedAlumno = { ...a };
+    form.control.markAsTouched();
+  }
+
+  deleteAlumno(id: number): void {
+    if (confirm('¿Está seguro que desea eliminar este alumno?')) {
+      this.alumnoService.delete(id).subscribe(() => this.loadAlumnos());
+    }
+  }
+
+  resetForm(form: NgForm): void {
+    form.resetForm();
+    this.selectedAlumno = this.emptyAlumno();
+  }
+
+  private emptyAlumno(): Alumno {
+    return {
+      id: 0,
+      nombre: '',
+      apellido: '',
+      dni: '',
+      fechaNacimiento: new Date(),
+      email: ''
+    };
+  }
 }
+
+

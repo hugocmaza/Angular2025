@@ -1,0 +1,36 @@
+{
+  "alumnos": [
+    {
+      "id": "1",
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "dni": "12345678",
+      "fechaNacimiento": "1990-01-01",
+      "email": "juan@example.com"
+    },
+    {
+      "id": "3",
+      "nombre": "4444",
+      "apellido": "444",
+      "dni": "4444444",
+      "fechaNacimiento": "2025-05-01",
+      "email": "maria@gmail.com"
+    },
+    {
+      "id": 4,
+      "nombre": "yyyy",
+      "apellido": "yyyy",
+      "dni": "4444444",
+      "fechaNacimiento": "2025-05-02",
+      "email": "55@gg.com"
+    },
+    {
+      "id": 5,
+      "nombre": "hhh",
+      "apellido": "hhhh",
+      "dni": "4444444",
+      "fechaNacimiento": "2025-05-02",
+      "email": "55@gg.com"
+    }
+  ]
+}
